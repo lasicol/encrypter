@@ -32,10 +32,10 @@ export class EncryptService {
         'rsa',
         this.GENERATE_KEYS_OPTIONS,
       );
-      console.log(publicKey);
-      return { publicKey, privateKey };
+      return { publicKey: String(publicKey), privateKey: String(privateKey) };
     } catch (err) {
-      console.log(err);
+      console.error(err);
+      throw err;
     }
   }
 
@@ -49,17 +49,22 @@ export class EncryptService {
   }
 
   encrypt(data: Buffer, key: string): string {
-    const chunksArray = this.splitBuffer(data, this.ENCRYPT_CHUNK);
-    const encryptedChunks = chunksArray.map((buffChunk) => {
-      return publicEncrypt(
-        {
-          key,
-          ...this.KEY_OPTIONS,
-        },
-        buffChunk,
-      );
-    });
-    return Buffer.concat(encryptedChunks).toString('base64');
+    try {
+      const chunksArray = this.splitBuffer(data, this.ENCRYPT_CHUNK);
+      const encryptedChunks = chunksArray.map((buffChunk) => {
+        return publicEncrypt(
+          {
+            key,
+            ...this.KEY_OPTIONS,
+          },
+          buffChunk,
+        );
+      });
+      return Buffer.concat(encryptedChunks).toString('base64');
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
   }
 
   decrypt(data: Buffer, key: string): Buffer {

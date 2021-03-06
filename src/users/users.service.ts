@@ -22,6 +22,7 @@ export class UsersService {
     },
   ];
 
+  //for the purpose of this task, the key assiciated to the user is stored in memory
   private keys: Map<string, string> = new Map();
 
   async findOne(email: string): Promise<IUser | undefined> {
