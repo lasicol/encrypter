@@ -16,7 +16,7 @@ describe('UsersService', () => {
     const user = {
       userId: 1,
       email: 'john@change.me',
-      password: 'changeme1',
+      password: '$2b$10$bg46anrvkFAts4LmDey1quMjSYnvIsWBDKNlcoDZXgZvxDRwUslDW',
     };
 
     expect(await service.findOne(user.email)).toEqual(user);

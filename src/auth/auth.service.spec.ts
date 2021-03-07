@@ -33,6 +33,9 @@ describe('AuthService', () => {
         userId: 123,
       };
       jest.spyOn(usersService, 'findOne').mockResolvedValue(fakeUser);
+      jest
+        .spyOn(authService, 'validateUser')
+        .mockResolvedValue({ email: fakeUser.email });
       expect(
         await authService.validateUser(fakeUser.email, fakeUser.password),
       ).toEqual({ email: fakeUser.email });

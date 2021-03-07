@@ -7,6 +7,7 @@ import {
   Request,
   HttpException,
   Body,
+  HttpCode,
 } from '@nestjs/common';
 import { Express } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -14,6 +15,7 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guards';
 import { EncryptService } from './encrypt.service';
 import { UsersService } from '../users/users.service';
 import { DecryptDto } from './dto/decrypt.dto';
+import { ApiBody, ApiConsumes, ApiHeader, ApiResponse } from '@nestjs/swagger';
 
 @Controller('')
 export class EncryptController {
@@ -24,6 +26,15 @@ export class EncryptController {
 
   @Post('generate-key-pair')
   @UseGuards(JwtAuthGuard)
+  @HttpCode(201)
+  @ApiHeader({
+    name: 'Authorization',
+    schema: { type: 'string', example: 'Bearer {{AuthToken}}' },
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'The key pair has been created.',
+  })
   async generateKeyPair(@Request() req) {
     try {
       const keyPair = await this.encryptService.generateKeyPair();
@@ -36,6 +47,26 @@ export class EncryptController {
 
   @Post('encrypt')
   @UseGuards(JwtAuthGuard)
+  @HttpCode(200)
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        file: {
+          format: 'binary',
+        },
+      },
+    },
+  })
+  @ApiHeader({
+    name: 'Authorization',
+    schema: { type: 'string', example: 'Bearer {{AuthToken}}' },
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'File has been encrypted',
+  })
   @UseInterceptors(FileInterceptor('file'))
   encrypt(@Request() req, @UploadedFile() file: Express.Multer.File) {
     const userKey = this.usersService.getKey(req.user.email);
@@ -48,6 +79,15 @@ export class EncryptController {
   }
 
   @Post('decrypt')
+  @HttpCode(200)
+  @ApiHeader({
+    name: 'Authorization',
+    schema: { type: 'string', example: 'Bearer {{AuthToken}}' },
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'File has been decrypted',
+  })
   @UseGuards(JwtAuthGuard)
   decrypt(@Request() req, @Body() decryptDto: DecryptDto) {
     const data = Buffer.from(decryptDto.data, 'base64');
