@@ -5,10 +5,7 @@
 * [General info](#general-info)
 * [Technologies](#technologies)
 * [Setup](#setup)
-* [Features](#features)
-* [Status](#status)
-* [Inspiration](#inspiration)
-* [Contact](#contact)
+* [Users](#users)
 
 ## General info
 The app is nodejs server that allows user to encrypt any file through the api.
@@ -23,3 +20,15 @@ The app use environment variable `JWT_SECRET`. Set this to unique string and cha
 If `JWT_SECRET` is not set, the default value is taken.  
 Start the app by using command `npm run start:prod` in project root directory.  
 
+## Users
+App has hardcoded two users which can be used for testing:
+```javascript
+{
+  email: 'john@change.me',
+  password: 'changeme1',
+},
+{
+  email: 'mary@change.mea',
+  password: 'changeme2',
+},
+```
