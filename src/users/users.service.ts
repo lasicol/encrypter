@@ -13,12 +13,12 @@ export class UsersService {
     {
       userId: 1,
       email: 'john@change.me',
-      password: 'changeme1',
+      password: '$2b$10$bg46anrvkFAts4LmDey1quMjSYnvIsWBDKNlcoDZXgZvxDRwUslDW',
     },
     {
       userId: 2,
       email: 'mary@change.mea',
-      password: 'changeme2',
+      password: '$2b$10$93EBuDPR/2LpfOU6liX2w.iI3znVIVepkJJLaiJwJaRKprP3915yO',
     },
   ];
 
