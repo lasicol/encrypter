@@ -7,6 +7,8 @@
 * [Setup](#setup)
 * [Users](#users)
 * [Usage](#usage)
+* [Encryption](#encryption)
+* [TODO](#todo)
 
 ## General info
 The app is nodejs server that allows user to encrypt any file through the api.
@@ -36,3 +38,31 @@ App has hardcoded two users which can be used for testing:
 Start the app by using command `npm run start:prod` in project root directory.  
 The app will listen on port 3000 by default. You can change it by setting `PORT` environemt variable.  
 When app is running you can access api documentation from your browser: http://localhost:{PORT}/apiDoc  
+
+## Encrytpion
+Key is generated with the options:  
+```javascript
+{
+    modulusLength: 4096,
+    publicKeyEncoding: {
+      type: 'spki',
+      format: 'pem',
+    },
+    privateKeyEncoding: {
+      type: 'pkcs1',
+      format: 'pem',
+    },
+}
+```
+Key options used in encryption alghoritm are:  
+```javascript
+{
+    padding: constants.RSA_PKCS1_OAEP_PADDING,
+    oaepHash: 'sha256',
+};
+```
+Due to the fact that RSA allows to encrypt small files only, the app will split the file to 200 byte chunks, encrypt each chunk and concatinate all of the chunks. Each encrypted chunk size is 512 bytes. To decrypt the file, the data has to be split to 512 byte chunks, then decrypted.
+
+## TODO
+* add logger, currently all errors are reported to the console
+* expand e2e test, only one test is created
